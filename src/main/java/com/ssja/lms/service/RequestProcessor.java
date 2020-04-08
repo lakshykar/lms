@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eko.paymentcollection.util.HttpResponseCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssja.lms.dto.ApiCommonRequest;
 import com.ssja.lms.dto.ApiCommonResponse;
 import com.ssja.lms.exception.InvalidValueException;
 import com.ssja.lms.util.ConfigurationConstants;
+import com.ssja.lms.util.HttpResponseCode;
 import com.ssja.lms.util.InteractionType;
 import com.ssja.lms.util.ResponseCodeConstants;
 

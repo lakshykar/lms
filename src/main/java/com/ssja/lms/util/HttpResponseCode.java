@@ -1,4 +1,4 @@
-package com.eko.paymentcollection.util;
+package com.ssja.lms.util;
 
 import com.ssja.lms.exception.InvalidValueException;
 

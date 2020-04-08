@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.eko.paymentcollection.util.HttpResponseCode;
 import com.ssja.lms.dao.InteractionsRepository;
 import com.ssja.lms.dao.RequestStructureRepository;
 import com.ssja.lms.dto.ApiCommonRequest;
@@ -17,6 +16,7 @@ import com.ssja.lms.dto.ApiCommonResponse;
 import com.ssja.lms.dto.ErrorResponse;
 import com.ssja.lms.model.Interactions;
 import com.ssja.lms.model.RequestStructure;
+import com.ssja.lms.util.HttpResponseCode;
 import com.ssja.lms.util.ResponseCodeConstants;
 import com.ssja.lms.util.StringConstants;
 
