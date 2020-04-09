@@ -10,6 +10,9 @@ public enum ResponseCodeConstants {
 	FORBIDDEN("403","FORBIDDEN",1,"Fail"),
 	NOT_FOUND("404","NOT_FOUND",1,"Fail"),
 	INTERNAL_SERVER_ERROR("500","INTERNAL_SERVER_ERROR",2,"Error"),
+	USER_NOT_FOUND("600","User Not Found",1,"Fail"),
+	USER_NAME_TAKEN("601","Username alredy taken",1,"Fail"),
+	USER_ADDED("602","User added",0,"Success"),
 	;
 
 	private String responseCode;

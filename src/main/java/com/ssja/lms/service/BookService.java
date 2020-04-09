@@ -28,9 +28,9 @@ import com.ssja.lms.util.RoleConstants;
 import com.ssja.lms.util.UserTypeConstants;
 
 @Service
-public class UserService extends BaseService {
+public class BookService extends BaseService {
 
-	private static Logger logger = LoggerFactory.getLogger(UserService.class);
+	private static Logger logger = LoggerFactory.getLogger(BookService.class);
 
 	@Autowired
 	UserRepository userRepository;
@@ -59,14 +59,15 @@ public class UserService extends BaseService {
 
 		switch (commonRequest.getInteractionType()) {
 
-		case ADD_LIBRARIAN:
-			addLibrarian(commonRequest, commonResponse);
+		case ADD_BOOK:
 			break;
-		case GET_LIBRARIAN:
-			getLibrarian(commonRequest, commonResponse);
+		case VIEW_BOOKS:
 			break;
-		case DELETE_LIBRARIAN:
-			deleteLibrarian(commonRequest, commonResponse);
+		case ISSUE_BOOK:
+			break;
+		case VIEW_ISSUED_BOOK:
+			break;
+		case RETURN_ISSUED_BOOK:
 			break;
 
 		}
@@ -118,77 +119,6 @@ public class UserService extends BaseService {
 			commonResponse.setResponseCode(ResponseCodeConstants.INTERNAL_SERVER_ERROR.getResponseCode());
 			commonResponse.setHttpStatusCode(HttpResponseCode.INTERNAL_SERVER_ERROR.getHttpCode());
 		}
-	}
-
-	private void deleteLibrarian(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
-
-		User user = userRepository.findByIdAndUserTypeAndStatus(
-				Integer.parseInt(commonRequest.getRequestParameters().get(ParameterConstants.USER_ID.getName())),
-				UserTypeConstants.LIBRARIAN.getUserType(), ConfigurationConstants.ACTIVE.getId());
-
-		if (user != null) {
-
-			user.setStatus(ConfigurationConstants.INACTIVE.getId());
-
-			em.persist(user);
-
-			List<UserRoleMapping> userRoles = userRoleMappingRepository.findByUserId(user);
-
-			if (userRoles != null && !userRoles.isEmpty()) {
-				userRoles.forEach(userRole -> {
-					userRole.setStatus(ConfigurationConstants.INACTIVE.getId());
-					em.persist(userRole);
-				});
-			}
-			commonResponse.getResponseParameter().put(ParameterConstants.USER_ID.getName(), user.getId());
-			commonResponse.getResponseParameter().put(ParameterConstants.USERNAME.getName(), user.getUsername());
-			commonResponse.getResponseParameter().put("message", "user has been deleted");
-			commonResponse.setResponseCode(ResponseCodeConstants.OK.getResponseCode());
-			commonResponse.setHttpStatusCode(HttpResponseCode.OK.getHttpCode());
-		} else {
-			commonResponse.getResponseParameter().put("message", "No Active librarian found with provided user id");
-			commonResponse.setResponseCode(ResponseCodeConstants.USER_NOT_FOUND.getResponseCode());
-			commonResponse.setHttpStatusCode(HttpResponseCode.OK.getHttpCode());
-		}
-
-	}
-
-	private void getLibrarian(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
-
-		try {
-			List<User> users = new ArrayList<>();
-			
-
-			if (commonRequest.getRequestParameters().get(ParameterConstants.USER_ID.getName()) != null) {
-				User user = userRepository.findByIdAndUserType(
-						Integer.parseInt(commonRequest.getRequestParameters().get(ParameterConstants.USER_ID.getName())),
-						UserTypeConstants.LIBRARIAN.getUserType());
-				
-				users.add(user);
-			} else {
-				users = userRepository.findByUserType(UserTypeConstants.LIBRARIAN.getUserType());
-			}
-			
-			List<UserDto> userList = new ArrayList<>();
-			
-			if(users!=null && !users.isEmpty()) {
-				users.forEach(user -> userList.add(new UserDto(user)));				
-			}
-			
-			if(userList.isEmpty()) {
-				commonResponse.getResponseParameter().put("meessage", "No librarian found");
-			}else {				
-				commonResponse.getResponseParameter().put("user_list", userList);
-			}
-			commonResponse.setResponseCode(ResponseCodeConstants.OK.getResponseCode());
-			commonResponse.setHttpStatusCode(HttpResponseCode.OK.getHttpCode());
-
-		} catch (Exception e) {
-			logger.error("Exception", e);
-			commonResponse.setResponseCode(ResponseCodeConstants.INTERNAL_SERVER_ERROR.getResponseCode());
-			commonResponse.setHttpStatusCode(HttpResponseCode.INTERNAL_SERVER_ERROR.getHttpCode());
-		}
-
 	}
 
 }

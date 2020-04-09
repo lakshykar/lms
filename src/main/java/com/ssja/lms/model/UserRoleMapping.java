@@ -72,6 +72,14 @@ public class UserRoleMapping implements Serializable {
 		this.userId = userId;
 	}
 
+	public Role getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Role roleId) {
+		this.roleId = roleId;
+	}
+
 	public int getStatus() {
 		return status;
 	}

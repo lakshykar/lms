@@ -59,7 +59,9 @@ public class RequestProcessor {
 
 			BaseService service = baseFactory.getService(commonRequest.getInteractionType());
 
-			commonResponse = service.processRequest(commonRequest, commonResponse);
+			service.processRequest(commonRequest, commonResponse);
+
+			buildResponse(commonRequest, commonResponse);
 
 		} catch (Exception e) {
 			logger.error("Exception", e);
@@ -77,10 +79,14 @@ public class RequestProcessor {
 			ResponseCodeConstants responseCode = ResponseCodeConstants
 					.getFromResposneCode(commonResponse.getResponseCode());
 			commonResponse.setResponseCodeDesc(responseCode.getDescription());
+			if(!commonResponse.getResponseParameter().isEmpty()) {
+				commonResponse.setData(commonResponse.getResponseParameter());				
+			}
 			commonResponse.setStatus(responseCode.getStatus());
 			commonResponse.setStatusDesc(responseCode.getStatusDesc());
 
 		} catch (InvalidValueException e) {
+			logger.error("Exeption", e);
 			commonResponse.setHttpStatusCode(HttpResponseCode.INTERNAL_SERVER_ERROR.getHttpCode());
 			commonResponse.setResponseCode(ResponseCodeConstants.INTERNAL_SERVER_ERROR.getResponseCode());
 			commonResponse.setResponseCodeDesc(ResponseCodeConstants.INTERNAL_SERVER_ERROR.getDescription());

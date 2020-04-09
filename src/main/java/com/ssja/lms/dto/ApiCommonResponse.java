@@ -1,5 +1,8 @@
 package com.ssja.lms.dto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -11,8 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({ "status", "status_desc", "response_code", "response_code_desc", "response_status_id", "data",
-		"error" })
+@JsonPropertyOrder({ "status", "status_desc", "response_code", "response_code_desc", "data", "error" })
 public class ApiCommonResponse {
 
 	private int status;
@@ -26,9 +28,6 @@ public class ApiCommonResponse {
 	@JsonProperty("response_code_desc")
 	private String responseCodeDesc;
 
-	@JsonProperty("response_status_id")
-	private int responseStatusId;
-
 	private Object data;
 
 	private ErrorResponse error;
@@ -36,7 +35,10 @@ public class ApiCommonResponse {
 	@JsonIgnore
 	private Integer httpStatusCode;
 	@JsonIgnore
-	private String ValidationErrorMessage;
+	private String validationErrorMessage;
+	
+	@JsonIgnore
+	Map<String, Object> responseParameter = new HashMap<>();
 
 	public int getStatus() {
 		return status;
@@ -70,14 +72,6 @@ public class ApiCommonResponse {
 		this.responseCodeDesc = responseCodeDesc;
 	}
 
-	public int getResponseStatusId() {
-		return responseStatusId;
-	}
-
-	public void setResponseStatusId(int responseStatusId) {
-		this.responseStatusId = responseStatusId;
-	}
-
 	public Object getData() {
 		return data;
 	}
@@ -103,11 +97,21 @@ public class ApiCommonResponse {
 	}
 
 	public String getValidationErrorMessage() {
-		return ValidationErrorMessage;
+		return validationErrorMessage;
 	}
 
 	public void setValidationErrorMessage(String validationErrorMessage) {
-		ValidationErrorMessage = validationErrorMessage;
+		this.validationErrorMessage = validationErrorMessage;
 	}
+
+	public Map<String, Object> getResponseParameter() {
+		return responseParameter;
+	}
+
+	public void setResponseParameter(Map<String, Object> responseParameter) {
+		this.responseParameter = responseParameter;
+	}
+	
+	
 
 }

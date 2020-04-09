@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import com.ssja.lms.dto.ApiCommonRequest;
 import com.ssja.lms.dto.ApiCommonResponse;
 import com.ssja.lms.service.RequestProcessor;
 import com.ssja.lms.util.InteractionType;
+import com.ssja.lms.util.ParameterConstants;
 import com.ssja.lms.util.ResponseCodeConstants;
 
 /**
@@ -78,12 +80,13 @@ public class ApiRequestController {
 
 		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
 	}
-	
-	@PutMapping(value = "/librarian/{user_id}")
+
+	@PutMapping(value = "/librarian//{user_id}/delete")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseEntity<ApiCommonResponse> deleteLibrarian(@RequestParam Map<String, String> requestParameters,
-			HttpServletRequest httpServletRequest) {
+			@PathVariable("user_id") String userId, HttpServletRequest httpServletRequest) {
+		requestParameters.put(ParameterConstants.USER_ID.getName(), userId);
 
 		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
 				InteractionType.DELETE_LIBRARIAN.getInteractionId());

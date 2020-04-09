@@ -13,6 +13,10 @@ public class BaseFactory {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	BookService bookService;
+	
 
 	public BaseService getService(InteractionType interactionType) {
 
@@ -22,6 +26,13 @@ public class BaseFactory {
 		case GET_LIBRARIAN:
 		case DELETE_LIBRARIAN:
 			return userService;
+		
+		case ADD_BOOK:
+		case VIEW_BOOKS:
+		case VIEW_ISSUED_BOOK:
+		case RETURN_ISSUED_BOOK:
+		case ISSUE_BOOK:
+			return bookService;
 
 		default:
 			return baseService;

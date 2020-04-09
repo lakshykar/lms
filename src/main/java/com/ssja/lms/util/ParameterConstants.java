@@ -4,9 +4,24 @@ import com.ssja.lms.exception.InvalidValueException;
 
 public enum ParameterConstants {
 
-	 INITIATOR (1,"initiator"),
-	 DEVICETID (2,"deviceTID"),
-	;
+	USER_ID(1,"user_id"),
+	NAME(2,"name"),
+	MOBILE(3,"mobile"),
+	USERNAME(4,"username"),
+	PASSWORD(5,"password"),
+	USER_TYPE(6,"user_type"),
+	STATUS(7,"status"),
+	EMAIL(8,"email"),
+	TITLE(9,"title"),
+	ISBN(10,"isbn"),
+	LOCATION(11,"location"),
+	AUTHOR(12,"author"),
+	NUMBER_OF_COPIES(13,"number_of_copies"),
+	PUBLISHER(14,"publisher"),
+	LIMIT(15,"limit"),
+	OFFSET(16,"offset");
+	
+
 	private int parameterId;
 
 	private String name;

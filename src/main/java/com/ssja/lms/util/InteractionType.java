@@ -10,8 +10,13 @@ import com.ssja.lms.exception.InvalidValueException;
 public enum InteractionType {
 
 	ADD_LIBRARIAN(1000, "Add Librarian"),
-	GET_LIBRARIAN(1002, "Get Librarian"),
-	DELETE_LIBRARIAN(1003, "Delete Librarian"),
+	GET_LIBRARIAN(1001, "Get Librarian"),
+	DELETE_LIBRARIAN(1002, "Delete Librarian"),
+	ADD_BOOK(1003, "Add Book"),
+	VIEW_BOOKS(1004, "View Books"),
+	ISSUE_BOOK(1005, "Issue Book"),
+	VIEW_ISSUED_BOOK(1006, "View Issued Book"),
+	RETURN_ISSUED_BOOK(1007, "Return Issued Book"),
 	;
 	
 	private int interactionId;

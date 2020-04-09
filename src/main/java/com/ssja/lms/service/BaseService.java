@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +34,9 @@ public class BaseService implements BaseInterface {
 	@Autowired
 	InteractionsRepository interactionsRepository;
 
+	@PersistenceContext
+	EntityManager em;
+	
 	@Override
 	public boolean validate(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 
