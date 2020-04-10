@@ -4,6 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssja.lms.model.Book;
 
 @XmlRootElement
@@ -19,6 +20,7 @@ public class BookDto {
 
 	private String author;
 
+	@JsonProperty("number_of_copies")
 	private int numberOfCopies;
 
 	private String publisher;

@@ -12,7 +12,7 @@
 	<groupId>com.ssja</groupId>
 	<artifactId>lms</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>lms</name>
+	<name>library management system</name>
 	<description>Library Management System</description>
 
 	<properties>
