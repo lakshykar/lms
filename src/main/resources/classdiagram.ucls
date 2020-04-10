@@ -4,7 +4,7 @@
   router="FAN">  
   <class id="1" language="java" name="com.ssja.lms.service.UserService" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/service/UserService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="279" width="439" x="520" y="1099"/>    
+    <position height="279" width="439" x="999" y="1064"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -13,7 +13,7 @@
   </class>  
   <class id="2" language="java" name="com.ssja.lms.service.BaseFactory" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/service/BaseFactory.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="99" width="226" x="978" y="713"/>    
+    <position height="99" width="226" x="978" y="678"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -22,7 +22,7 @@
   </class>  
   <class id="3" language="java" name="com.ssja.lms.service.RequestProcessor" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/service/RequestProcessor.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="171" width="341" x="978" y="502"/>    
+    <position height="171" width="341" x="978" y="467"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -31,7 +31,7 @@
   </class>  
   <class id="4" language="java" name="com.ssja.lms.service.BaseService" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/service/BaseService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="207" width="439" x="518" y="852"/>    
+    <position height="207" width="439" x="518" y="817"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -40,7 +40,7 @@
   </class>  
   <class id="5" language="java" name="com.ssja.lms.service.BookService" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/service/BookService.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="297" width="439" x="999" y="1099"/>    
+    <position height="297" width="439" x="520" y="1064"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -49,7 +49,7 @@
   </class>  
   <interface id="6" language="java" name="com.ssja.lms.service.BaseInterface" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/service/BaseInterface.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="117" width="439" x="41" y="1099"/>    
+    <position height="117" width="439" x="41" y="1064"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -58,68 +58,77 @@
   </interface>  
   <class id="7" language="java" name="com.ssja.lms.controller.ApiRequestController" project="lms" 
     file="/lms/src/main/java/com/ssja/lms/controller/ApiRequestController.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="425" width="203" x="978" y="37"/>    
+    <position height="390" width="295" x="978" y="37"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="8">    
-    <bendpoint x="987" y="852"/>    
+  <class id="8" language="java" name="com.ssja.lms.configuration.SecurityConfiguration" project="lms" 
+    file="/lms/src/main/java/com/ssja/lms/configuration/SecurityConfiguration.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="708" y="119"/>    
+    <display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="9">    
+    <bendpoint x="1008" y="817"/>    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="9" name="userService"/>      
-      <multiplicity id="10" minimum="0" maximum="1"/>    
+      <attribute id="10" name="userService"/>      
+      <multiplicity id="11" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="11">    
+  <association id="12">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="12" name="baseService"/>      
-      <multiplicity id="13" minimum="0" maximum="1"/>    
+      <attribute id="13" name="baseService"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="14">    
+  <generalization id="15">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="4"/>  
   </generalization>  
-  <association id="15">    
-    <bendpoint x="1008" y="852"/>    
+  <association id="16">    
+    <bendpoint x="987" y="817"/>    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="16" name="bookService"/>      
-      <multiplicity id="17" minimum="0" maximum="1"/>    
+      <attribute id="17" name="bookService"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="5" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="18">    
+  <association id="19">    
     <end type="SOURCE" refId="7" navigable="false">      
-      <attribute id="19" name="requestProcessor"/>      
-      <multiplicity id="20" minimum="0" maximum="1"/>    
+      <attribute id="20" name="requestProcessor"/>      
+      <multiplicity id="21" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="21">    
+  <generalization id="22">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="4"/>  
   </generalization>  
-  <association id="22">    
+  <association id="23">    
     <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="23" name="baseFactory"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
+      <attribute id="24" name="baseFactory"/>      
+      <multiplicity id="25" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="25">    
+  <realization id="26">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="6"/>  
   </realization>  
-  <classifier-display autosize="false" stereotype="true" package="true" initial-value="false" signature="true" 
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
     <operations public="true" package="true" protected="true" private="true" static="true"/>  
