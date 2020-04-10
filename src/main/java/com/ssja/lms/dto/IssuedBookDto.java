@@ -37,7 +37,7 @@ public class IssuedBookDto {
 		this.isbn = issuedBook.getBookId().getIsbn();
 		this.icardNumber = issuedBook.getUserId().getIdCardNumber();
 		this.returnDate = sdf.format(issuedBook.getCreatedAt());
-		this.issuedDate = sdf.format(issuedBook.getReturnDate());
+		this.issuedDate = sdf.format(issuedBook.getIssuedTill());
 		this.issueBookId = issuedBook.getId();
 	}
 
