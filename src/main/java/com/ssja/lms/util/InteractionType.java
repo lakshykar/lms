@@ -17,6 +17,9 @@ public enum InteractionType {
 	ISSUE_BOOK(1005, "Issue Book"),
 	VIEW_ISSUED_BOOK(1006, "View Issued Book"),
 	RETURN_ISSUED_BOOK(1007, "Return Issued Book"),
+	UPDATE_BOOK(1008, "Update Book"),
+	ADD_STUDENT(1009, "Add Student"),
+	GET_STUDENT(1010, "Get Student"),
 	;
 	
 	private int interactionId;

@@ -13,6 +13,7 @@ public enum ResponseCodeConstants {
 	USER_NOT_FOUND("600","User Not Found",1,"Fail"),
 	USER_NAME_TAKEN("601","Username alredy taken",1,"Fail"),
 	USER_ADDED("602","User added",0,"Success"),
+	DUPLICATE_ISBN("603","Duplicate isbn",1,"Fail"),
 	;
 
 	private String responseCode;

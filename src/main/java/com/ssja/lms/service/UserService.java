@@ -68,6 +68,14 @@ public class UserService extends BaseService {
 		case DELETE_LIBRARIAN:
 			deleteLibrarian(commonRequest, commonResponse);
 			break;
+		case ADD_STUDENT:
+			addStudent(commonRequest, commonResponse);
+			break;
+		case GET_STUDENT:
+			getStudent(commonRequest, commonResponse);
+			break;
+		default:
+			break;
 
 		}
 
@@ -157,27 +165,27 @@ public class UserService extends BaseService {
 
 		try {
 			List<User> users = new ArrayList<>();
-			
 
 			if (commonRequest.getRequestParameters().get(ParameterConstants.USER_ID.getName()) != null) {
 				User user = userRepository.findByIdAndUserType(
-						Integer.parseInt(commonRequest.getRequestParameters().get(ParameterConstants.USER_ID.getName())),
+						Integer.parseInt(
+								commonRequest.getRequestParameters().get(ParameterConstants.USER_ID.getName())),
 						UserTypeConstants.LIBRARIAN.getUserType());
-				
+
 				users.add(user);
 			} else {
 				users = userRepository.findByUserType(UserTypeConstants.LIBRARIAN.getUserType());
 			}
-			
+
 			List<UserDto> userList = new ArrayList<>();
-			
-			if(users!=null && !users.isEmpty()) {
-				users.forEach(user -> userList.add(new UserDto(user)));				
+
+			if (users != null && !users.isEmpty()) {
+				users.forEach(user -> userList.add(new UserDto(user)));
 			}
-			
-			if(userList.isEmpty()) {
+
+			if (userList.isEmpty()) {
 				commonResponse.getResponseParameter().put("meessage", "No librarian found");
-			}else {				
+			} else {
 				commonResponse.getResponseParameter().put("user_list", userList);
 			}
 			commonResponse.setResponseCode(ResponseCodeConstants.OK.getResponseCode());
@@ -189,6 +197,82 @@ public class UserService extends BaseService {
 			commonResponse.setHttpStatusCode(HttpResponseCode.INTERNAL_SERVER_ERROR.getHttpCode());
 		}
 
+	}
+
+	private void getStudent(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
+
+		try {
+			List<User> users = new ArrayList<>();
+
+			if (commonRequest.getRequestParameters().get(ParameterConstants.ICARD_NUMBER.getName()) != null) {
+				User user = userRepository.findByIdCardNumberAndUserType(
+						commonRequest.getRequestParameters().get(ParameterConstants.ICARD_NUMBER.getName()),
+						UserTypeConstants.STUDENT.getUserType());
+
+				users.add(user);
+			} else {
+				users = userRepository.findByUserType(UserTypeConstants.STUDENT.getUserType());
+			}
+
+			List<UserDto> userList = new ArrayList<>();
+
+			if (users != null && !users.isEmpty()) {
+				users.forEach(user -> userList.add(new UserDto(user)));
+			}
+
+			if (userList.isEmpty()) {
+				commonResponse.getResponseParameter().put("meessage", "No User found");
+			} else {
+				commonResponse.getResponseParameter().put("user_list", userList);
+			}
+			commonResponse.setResponseCode(ResponseCodeConstants.OK.getResponseCode());
+			commonResponse.setHttpStatusCode(HttpResponseCode.OK.getHttpCode());
+
+		} catch (Exception e) {
+			logger.error("Exception", e);
+			commonResponse.setResponseCode(ResponseCodeConstants.INTERNAL_SERVER_ERROR.getResponseCode());
+			commonResponse.setHttpStatusCode(HttpResponseCode.INTERNAL_SERVER_ERROR.getHttpCode());
+		}
+
+	}
+
+	@Transactional
+	private void addStudent(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
+		logger.info("Inside addLibrarian");
+		try {
+			User user = userRepository
+					.findByUsername(commonRequest.getRequestParameters().get(ParameterConstants.USERNAME.getName()));
+			if (user == null) {
+				user = new User();
+				user.setUserType(UserTypeConstants.STUDENT.getUserType());
+				user.setName(commonRequest.getRequestParameters().get(ParameterConstants.NAME.getName()));
+				user.setMobile(commonRequest.getRequestParameters().get(ParameterConstants.MOBILE.getName()));
+				user.setUsername(commonRequest.getRequestParameters().get(ParameterConstants.USERNAME.getName()));
+				user.setEmail(commonRequest.getRequestParameters().get(ParameterConstants.EMAIL.getName()));
+				user.setPassword(new BCryptPasswordEncoder()
+						.encode(commonRequest.getRequestParameters().get(ParameterConstants.PASSWORD.getName())));
+				user.setStatus(ConfigurationConstants.ACTIVE.getId());
+				em.persist(user);
+				em.flush();
+				user.setIdCardNumber("STUD00" + user.getId());
+				commonResponse.getResponseParameter().put(ParameterConstants.USER_ID.getName(), user.getId());
+				commonResponse.getResponseParameter().put(ParameterConstants.USERNAME.getName(), user.getUsername());
+				commonResponse.getResponseParameter().put("message", "User added");
+
+				commonResponse.setResponseCode(ResponseCodeConstants.USER_ADDED.getResponseCode());
+				commonResponse.setHttpStatusCode(HttpResponseCode.OK.getHttpCode());
+			} else {
+				logger.info("Username already taken");
+				commonResponse.getResponseParameter().put("message",
+						ResponseCodeConstants.USER_NAME_TAKEN.getDescription());
+				commonResponse.setResponseCode(ResponseCodeConstants.USER_NAME_TAKEN.getResponseCode());
+				commonResponse.setHttpStatusCode(HttpResponseCode.OK.getHttpCode());
+			}
+		} catch (Exception e) {
+			logger.error("Exception", e);
+			commonResponse.setResponseCode(ResponseCodeConstants.INTERNAL_SERVER_ERROR.getResponseCode());
+			commonResponse.setHttpStatusCode(HttpResponseCode.INTERNAL_SERVER_ERROR.getHttpCode());
+		}
 	}
 
 }

@@ -46,6 +46,8 @@ public class User implements Serializable {
 
 	private int userType;
 
+	private String idCardNumber;
+
 	private int status;
 
 	@Column(nullable = false, updatable = false)
@@ -136,6 +138,14 @@ public class User implements Serializable {
 
 	public void setUserType(int userType) {
 		this.userType = userType;
+	}
+
+	public String getIdCardNumber() {
+		return idCardNumber;
+	}
+
+	public void setIdCardNumber(String idCardNumber) {
+		this.idCardNumber = idCardNumber;
 	}
 
 }

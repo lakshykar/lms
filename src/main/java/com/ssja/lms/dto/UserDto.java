@@ -24,6 +24,9 @@ public class UserDto {
 	@JsonProperty("user_type")
 	String userType;
 
+	@JsonProperty("icard_number")
+	String icardNumber;
+
 	int status;
 
 	@JsonProperty("status_desc")
@@ -34,6 +37,7 @@ public class UserDto {
 		this.name = user.getName();
 		this.email = user.getEmail();
 		this.username = user.getUsername();
+		this.icardNumber = user.getIdCardNumber();
 		try {
 			this.userType = UserTypeConstants.getFromInt(user.getUserType()).getDescription();
 		} catch (InvalidValueException e) {
@@ -93,6 +97,14 @@ public class UserDto {
 
 	public void setStatusDesc(String statusDesc) {
 		this.statusDesc = statusDesc;
+	}
+
+	public String getIcardNumber() {
+		return icardNumber;
+	}
+
+	public void setIcardNumber(String icardNumber) {
+		this.icardNumber = icardNumber;
 	}
 
 }

@@ -25,6 +25,8 @@ public class BaseFactory {
 		case ADD_LIBRARIAN:
 		case GET_LIBRARIAN:
 		case DELETE_LIBRARIAN:
+		case ADD_STUDENT:
+		case GET_STUDENT:
 			return userService;
 		
 		case ADD_BOOK:
@@ -32,6 +34,7 @@ public class BaseFactory {
 		case VIEW_ISSUED_BOOK:
 		case RETURN_ISSUED_BOOK:
 		case ISSUE_BOOK:
+		case UPDATE_BOOK:
 			return bookService;
 
 		default:

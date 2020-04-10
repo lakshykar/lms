@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = { "createdAt", "updatedAt" }, allowGetters = true)
-public class Book implements Serializable {
+public class IssuedBook implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -36,27 +36,27 @@ public class Book implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String title;
-
-	private String isbn;
-
-	private String location;
-
-	private String author;
-
-	private String keywords;
-
-	private int numberOfCopies;
-
-	private String publisher;
-
-	private String yearOfPublication;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private User userId;
 
 	@ManyToOne
-	@JoinColumn(name = "created_by")
-	private User createdBy;
+	@JoinColumn(name = "book_id")
+	private Book bookId;
+
+	@ManyToOne
+	@JoinColumn(name = "issued_by")
+	private User issuedBy;
 
 	private int status;
+
+	private Date issuedTill;
+
+	private Date returnDate;
+
+	@ManyToOne
+	@JoinColumn(name = "received_by")
+	private User receivedBy;
 
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -76,68 +76,20 @@ public class Book implements Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
+	public User getUserId() {
+		return userId;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setUserId(User userId) {
+		this.userId = userId;
 	}
 
-	public String getIsbn() {
-		return isbn;
+	public Book getBookId() {
+		return bookId;
 	}
 
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getKeywords() {
-		return keywords;
-	}
-
-	public void setKeywords(String keywords) {
-		this.keywords = keywords;
-	}
-
-	public int getNumberOfCopies() {
-		return numberOfCopies;
-	}
-
-	public void setNumberOfCopies(int numberOfCopies) {
-		this.numberOfCopies = numberOfCopies;
-	}
-
-	public String getPublisher() {
-		return publisher;
-	}
-
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
-
-	public String getYearOfPublication() {
-		return yearOfPublication;
-	}
-
-	public void setYearOfPublication(String yearOfPublication) {
-		this.yearOfPublication = yearOfPublication;
+	public void setBookId(Book bookId) {
+		this.bookId = bookId;
 	}
 
 	public int getStatus() {
@@ -146,6 +98,22 @@ public class Book implements Serializable {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public Date getIssuedTill() {
+		return issuedTill;
+	}
+
+	public void setIssuedTill(Date issuedTill) {
+		this.issuedTill = issuedTill;
+	}
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
 	}
 
 	public Date getCreatedAt() {
@@ -164,12 +132,20 @@ public class Book implements Serializable {
 		this.updatedAt = updatedAt;
 	}
 
-	public User getCreatedBy() {
-		return createdBy;
+	public User getIssuedBy() {
+		return issuedBy;
 	}
 
-	public void setCreatedBy(User createdBy) {
-		this.createdBy = createdBy;
+	public void setIssuedBy(User issuedBy) {
+		this.issuedBy = issuedBy;
+	}
+
+	public User getReceivedBy() {
+		return receivedBy;
+	}
+
+	public void setReceivedBy(User receivedBy) {
+		this.receivedBy = receivedBy;
 	}
 
 }

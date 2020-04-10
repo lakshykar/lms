@@ -19,5 +19,9 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 	User findByIdAndUserType(int parseInt, int userType);
 
 	List<User> findByUserType(int userType);
+
+	User findByIdCardNumberAndUserType(String icardNumber, int userType);
+
+	User findByIdCardNumber(String icardNumber);
 	
 }

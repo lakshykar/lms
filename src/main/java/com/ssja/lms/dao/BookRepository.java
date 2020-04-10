@@ -7,5 +7,9 @@ import com.ssja.lms.model.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
+
+	Book findByIsbn(String isbn);
+
+	Book findByTitle(String title);
 	
 }

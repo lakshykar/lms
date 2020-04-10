@@ -80,8 +80,32 @@ public class ApiRequestController {
 
 		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
 	}
+	
+	@PostMapping(value = "/student")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> addStudent(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
 
-	@PutMapping(value = "/librarian//{user_id}/delete")
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.ADD_STUDENT.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+	
+	@GetMapping(value = "/student")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> getStudent(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
+
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.GET_STUDENT.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+
+	@PutMapping(value = "/librarian/{user_id}/delete")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResponseEntity<ApiCommonResponse> deleteLibrarian(@RequestParam Map<String, String> requestParameters,
@@ -93,7 +117,82 @@ public class ApiRequestController {
 
 		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
 	}
+	
+	@GetMapping(value = "/book")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> viewBooks(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
 
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.VIEW_BOOKS.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+
+	@PostMapping(value = "/book")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> addBook(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
+
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.ADD_BOOK.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+	
+	@PutMapping(value = "/book/{isbn}")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> addBook(@RequestParam Map<String, String> requestParameters,
+			@PathVariable("isbn") String isbn,HttpServletRequest httpServletRequest) {
+		
+		requestParameters.put(ParameterConstants.ISBN.getName(), isbn);
+		
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.UPDATE_BOOK.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+
+	
+	@PostMapping(value = "/book/issue")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> addIssue(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
+
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.ISSUE_BOOK.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+	
+	@GetMapping(value = "/book/issue")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> viewIssueBook(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
+
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.VIEW_ISSUED_BOOK.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+	
+	@PutMapping(value = "/book/return")
+	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ResponseEntity<ApiCommonResponse> returnIssuedBook(@RequestParam Map<String, String> requestParameters,
+			HttpServletRequest httpServletRequest) {
+
+		ApiCommonResponse response = consumeAndProcessRequest(requestParameters, httpServletRequest,
+				InteractionType.RETURN_ISSUED_BOOK.getInteractionId());
+
+		return ResponseEntity.status(response.getHttpStatusCode()).body(response);
+	}
+	
 	private ApiCommonResponse consumeAndProcessRequest(Map<String, String> requestParameters,
 			HttpServletRequest httpServletRequest, int interactionId) {
 

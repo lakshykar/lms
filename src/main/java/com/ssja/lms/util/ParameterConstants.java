@@ -19,7 +19,10 @@ public enum ParameterConstants {
 	NUMBER_OF_COPIES(13,"number_of_copies"),
 	PUBLISHER(14,"publisher"),
 	LIMIT(15,"limit"),
-	OFFSET(16,"offset");
+	OFFSET(16,"offset"),
+	ICARD_NUMBER(17,"icard_number"),
+	RETURN_DATE(18,"return_date"),
+	ISSUED_BOOK_ID(19,"issued_book_id");
 	
 
 	private int parameterId;

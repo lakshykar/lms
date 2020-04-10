@@ -12,6 +12,7 @@ public enum UserTypeConstants {
 	ADMIN(1, "Admin"),
 	LIBRARIAN(2, "Librarian"),
 	STUDENT(3, "Student"),
+	FACULTY(4, "Faculty"),
 	;
 	
 	private int userType;
