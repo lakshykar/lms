@@ -11,7 +11,7 @@
 * Delete librarian
 * Add Book
 * View Books
-* Add Student (To issue icar number)
+* Add Student (To issue icard number)
 * Issue Book
 * Return Book
 
