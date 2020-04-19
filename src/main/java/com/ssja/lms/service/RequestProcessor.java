@@ -1,8 +1,5 @@
 package com.ssja.lms.service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +36,6 @@ public class RequestProcessor {
 
 		} catch (InvalidValueException e) {
 			logger.error("InvalidValueException", e);
-
 			commonResponse.setHttpStatusCode(HttpResponseCode.BAD_REQUEST.getHttpCode());
 			commonResponse.setResponseCode(ResponseCodeConstants.BAD_REQUEST.getResponseCode());
 			commonResponse.setResponseCodeDesc("Invalid Interaction");

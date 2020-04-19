@@ -10,15 +10,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.persistence.EntityManager;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestReporter;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,12 +32,14 @@ import com.ssja.lms.model.Role;
 import com.ssja.lms.model.User;
 import com.ssja.lms.model.UserRoleMapping;
 import com.ssja.lms.service.RequestProcessor;
+import com.ssja.lms.util.ConfigurationConstants;
 import com.ssja.lms.util.RoleConstants;
 import com.ssja.lms.util.UserTypeConstants;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-class LmsApplicationTests {
+@DisplayName("Librarian Test")
+class LibrarianTests {
 
 	ObjectMapper mapper = new ObjectMapper();
 	Map<String, String> requestParameters;
@@ -56,9 +55,6 @@ class LmsApplicationTests {
 	@MockBean
 	UserRoleMappingRepository userRoleMappingRepository;
 
-	@Mock
-	EntityManager em;
-
 	@BeforeEach
 	void init(TestReporter reporter) {
 		this.reporter = reporter;
@@ -69,33 +65,36 @@ class LmsApplicationTests {
 	@Autowired
 	RequestProcessor requestProcessor;
 
-	@Nested
-	@DisplayName("Librarian Test")
-	class LibrarianTest {
+	
+	@Test
+	@DisplayName("Get Librarian Test")
+	void getLibrarianTest() {
+		commonRequest.setRequestParameters(requestParameters);
+		commonRequest.setInteractionId(1001);
 
-		@Test
-		@DisplayName("Get Librarian Test")
-		void getLibrarianTest() {
-			commonRequest.setRequestParameters(requestParameters);
-			commonRequest.setInteractionId(1001);
+		when(userRepository.findByUserType(UserTypeConstants.LIBRARIAN.getUserType())).thenReturn(Stream.of(
+				new User("Rohit", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1),
+				new User("Rohit1", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1))
+				.collect(Collectors.toList()));
 
-			when(userRepository.findByUserType(UserTypeConstants.LIBRARIAN.getUserType())).thenReturn(Stream.of(
-					new User("Rohit", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1),
-					new User("Rohit1", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1))
-					.collect(Collectors.toList()));
+		ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
 
-			ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
-
-			try {
-				reporter.publishEntry(mapper.writeValueAsString(response));
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
-
-			assertAll(() -> assertEquals(0, response.getStatus(), "Status should be 0"),
-					() -> assertEquals("OK", response.getResponseCodeDesc(), "Response code desc should be OK"));
-
+		try {
+			reporter.publishEntry(mapper.writeValueAsString(response));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
 		}
+
+		assertAll(() -> assertEquals(0, response.getStatus(), "Status should be 0"),
+				() -> assertEquals("OK", response.getResponseCodeDesc(), "Response code desc should be OK"));
+
+	}
+	
+	@Nested
+	@DisplayName("Add Librarian Tests")
+	class AddLibrarianTest {
+
+		
 
 		@Test
 		@DisplayName("Add Librarian Test with missing parameters")
@@ -176,12 +175,45 @@ class LmsApplicationTests {
 				e.printStackTrace();
 			}
 
-			assertAll(() -> assertEquals(0, response.getStatus(), () -> "Status should be failed"),
+			assertAll(() -> assertEquals(0, response.getStatus(), () -> "Status should be Success"),
 					() -> assertEquals("602", response.getResponseCode(), () -> "Status should be bad request OK"));
 
 		}
+
 	}
 	
-	
+	@Test
+	@DisplayName("Delete Librarian")
+	void deleteLibrarianTest() {
+
+		requestParameters.put("user_id", "3");
+
+		commonRequest.setRequestParameters(requestParameters);
+		commonRequest.setInteractionId(1002);
+
+		User user = new User("rohit_ibl3", "749857395", "abc@gmail.com",
+				UserTypeConstants.LIBRARIAN.getUserType(), 1);
+		when(userRepository.findByIdAndUserTypeAndStatus(3, UserTypeConstants.LIBRARIAN.getUserType(),
+				ConfigurationConstants.ACTIVE.getId()))
+						.thenReturn(user);
+
+		when(userRepository.save(user)).thenReturn(user);
+		
+		when(userRoleMappingRepository.findByUserId(user)).thenReturn(Stream.of(new UserRoleMapping()).collect(Collectors.toList()));
+		
+		when(userRoleMappingRepository.save(new UserRoleMapping())).thenReturn(new UserRoleMapping());
+
+		ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
+
+		try {
+			reporter.publishEntry(mapper.writeValueAsString(response));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		assertAll(() -> assertEquals(0, response.getStatus(), () -> "Status should be Success"),
+				() -> assertEquals("200", response.getResponseCode(), () -> "Status should be bad request OK"));
+
+	}
 
 }
