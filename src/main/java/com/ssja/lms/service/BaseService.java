@@ -33,9 +33,6 @@ public class BaseService implements BaseInterface {
 
 	@Autowired
 	InteractionsRepository interactionsRepository;
-
-	@PersistenceContext
-	EntityManager em;
 	
 	@Override
 	public boolean validate(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {

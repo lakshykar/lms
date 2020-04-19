@@ -27,9 +27,6 @@ public class RequestProcessor {
 	@Autowired
 	BaseFactory baseFactory;
 
-	@PersistenceContext
-	EntityManager em;
-
 	public ApiCommonResponse processRequest(ApiCommonRequest commonRequest) {
 
 		ApiCommonResponse commonResponse = new ApiCommonResponse();

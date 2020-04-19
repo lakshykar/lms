@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	RoleUrlMappingRepository roleUrlMappingRepository;
-	
+
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.jdbcAuthentication().dataSource(dataSource).authoritiesByUsernameQuery(
@@ -69,24 +69,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		}
 
 		for (Entry<String, List<String>> role : roleMap.entrySet()) {
-			logger.info("Key : {} \t Role : {}", role.getKey(),role.getValue());
+			logger.info("Key : {} \t Role : {}", role.getKey(), role.getValue());
 			String[] roles = role.getValue().toArray(new String[0]);
 			httpSecurity.authorizeRequests().antMatchers(role.getKey()).hasAnyRole(roles).and();
 		}
 
 		httpSecurity.httpBasic().and().formLogin().and().sessionManagement()
-		  .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable();
-		
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().csrf().disable();
+
 	}
 
 	@Bean
 	public BCryptPasswordEncoder encoder() {
-	    return new BCryptPasswordEncoder();
+		return new BCryptPasswordEncoder();
 	}
-	
-	/*@Bean
-	public PasswordEncoder getPasswordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
-	}*/
-	
+
 }

@@ -50,6 +50,20 @@ public class User implements Serializable {
 
 	private int status;
 
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public User(String name, String mobile, String email, int userType, int status) {
+		super();
+		this.name = name;
+		this.mobile = mobile;
+		this.email = email;
+		this.userType = userType;
+		this.status = status;
+	}
+
 	@Column(nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreatedDate

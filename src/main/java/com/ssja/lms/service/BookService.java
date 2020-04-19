@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,6 @@ public class BookService extends BaseService {
 	}
 
 	@Override
-	@Transactional
 	public ApiCommonResponse processRequest(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 
 		logger.info("Inside processRequest of {},", getClass().getName());
@@ -70,7 +67,7 @@ public class BookService extends BaseService {
 		switch (commonRequest.getInteractionType()) {
 
 		case ADD_BOOK:
-			addBook(commonRequest, commonResponse);
+			addBook(commonRequest, commonResponse);	
 			break;
 		case UPDATE_BOOK:
 			updateBook(commonRequest, commonResponse);
@@ -111,7 +108,7 @@ public class BookService extends BaseService {
 
 			lockKey = commonRequest.getRequestParameters().get(ParameterConstants.ISSUED_BOOK_ID.getName());
 			try {
-				logger.info("lock key {} ",lockKey);
+				logger.info("lock key {} ", lockKey);
 				MasterLocks.issuedBookLock.putIfAbsent(lockKey, new ReentrantLock(true));
 				lock = MasterLocks.issuedBookLock.get(lockKey);
 				acquired = lock.tryLock(10000, TimeUnit.MILLISECONDS);
@@ -184,8 +181,8 @@ public class BookService extends BaseService {
 			Book book = issuedBook.getBookId();
 			book.setNumberOfCopies(book.getNumberOfCopies() + 1);
 
-			em.persist(issuedBook);
-			em.persist(book);
+			bookRepository.save(book);
+			issueBookRepository.save(issuedBook);
 
 			commonResponse.getResponseParameter().put(ParameterConstants.ISBN.getName(), book.getIsbn());
 			commonResponse.getResponseParameter().put(ParameterConstants.TITLE.getName(), book.getTitle());
@@ -242,7 +239,6 @@ public class BookService extends BaseService {
 
 	}
 
-	@Transactional
 	private void issueBook(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 
 		try {
@@ -300,9 +296,9 @@ public class BookService extends BaseService {
 			issuedBook.setIssuedTill(returDateFormate
 					.parse(commonRequest.getRequestParameters().get(ParameterConstants.RETURN_DATE.getName())));
 			issuedBook.setStatus(IssuedBookStatusConstants.ISSUED.getStatus());
+			issueBookRepository.save(issuedBook);
+			bookRepository.save(book);
 
-			em.persist(issuedBook);
-			em.persist(book);
 			commonResponse.getResponseParameter().put(ParameterConstants.ISBN.getName(), book.getIsbn());
 			commonResponse.getResponseParameter().put(ParameterConstants.TITLE.getName(), book.getTitle());
 			commonResponse.getResponseParameter().put(ParameterConstants.RETURN_DATE.getName(),
@@ -361,7 +357,7 @@ public class BookService extends BaseService {
 			book.setNumberOfCopies(book.getNumberOfCopies() + Integer
 					.parseInt(commonRequest.getRequestParameters().get(ParameterConstants.NUMBER_OF_COPIES.getName())));
 
-			em.persist(book);
+			bookRepository.save(book);
 
 			commonResponse.getResponseParameter().put(ParameterConstants.TITLE.getName(), book.getTitle());
 			commonResponse.getResponseParameter().put(ParameterConstants.AUTHOR.getName(), book.getAuthor());
@@ -412,7 +408,6 @@ public class BookService extends BaseService {
 
 	}
 
-	@Transactional
 	private void addBook(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 		logger.info("Inside addLibrarian");
 		try {
@@ -462,8 +457,8 @@ public class BookService extends BaseService {
 			book.setNumberOfCopies(Integer
 					.parseInt(commonRequest.getRequestParameters().get(ParameterConstants.NUMBER_OF_COPIES.getName())));
 			book.setPublisher(commonRequest.getRequestParameters().get(ParameterConstants.PUBLISHER.getName()));
-			em.persist(book);
 
+			bookRepository.save(book);
 			commonResponse.getResponseParameter().put(ParameterConstants.TITLE.getName(), book.getTitle());
 			commonResponse.getResponseParameter().put(ParameterConstants.AUTHOR.getName(), book.getAuthor());
 			commonResponse.getResponseParameter().put(ParameterConstants.ISBN.getName(), book.getIsbn());

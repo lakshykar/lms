@@ -3,8 +3,6 @@ package com.ssja.lms.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +46,6 @@ public class UserService extends BaseService {
 	}
 
 	@Override
-	@Transactional
 	public ApiCommonResponse processRequest(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 
 		logger.info("Inside processRequest of {},", getClass().getName());
@@ -82,7 +79,6 @@ public class UserService extends BaseService {
 		return commonResponse;
 	}
 
-	@Transactional
 	private void addLibrarian(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 		logger.info("Inside addLibrarian");
 		try {
@@ -98,7 +94,8 @@ public class UserService extends BaseService {
 				user.setPassword(new BCryptPasswordEncoder()
 						.encode(commonRequest.getRequestParameters().get(ParameterConstants.PASSWORD.getName())));
 				user.setStatus(ConfigurationConstants.ACTIVE.getId());
-				em.persist(user);
+				userRepository.save(user);
+				//em.persist(user);
 
 				Role role = roleRepository.findById(RoleConstants.ROLE_LIBRARIAN.getRole()).get();
 
@@ -106,7 +103,7 @@ public class UserService extends BaseService {
 				userRoleMapping.setUserId(user);
 				userRoleMapping.setRoleId(role);
 				userRoleMapping.setStatus(ConfigurationConstants.ACTIVE.getId());
-				em.persist(userRoleMapping);
+				userRoleMappingRepository.save(userRoleMapping);
 
 				commonResponse.getResponseParameter().put(ParameterConstants.USER_ID.getName(), user.getId());
 				commonResponse.getResponseParameter().put(ParameterConstants.USERNAME.getName(), user.getUsername());
@@ -138,14 +135,14 @@ public class UserService extends BaseService {
 
 			user.setStatus(ConfigurationConstants.INACTIVE.getId());
 
-			em.persist(user);
+			userRepository.save(user);
 
 			List<UserRoleMapping> userRoles = userRoleMappingRepository.findByUserId(user);
 
 			if (userRoles != null && !userRoles.isEmpty()) {
 				userRoles.forEach(userRole -> {
 					userRole.setStatus(ConfigurationConstants.INACTIVE.getId());
-					em.persist(userRole);
+					userRoleMappingRepository.save(userRole);
 				});
 			}
 			commonResponse.getResponseParameter().put(ParameterConstants.USER_ID.getName(), user.getId());
@@ -236,7 +233,6 @@ public class UserService extends BaseService {
 
 	}
 
-	@Transactional
 	private void addStudent(ApiCommonRequest commonRequest, ApiCommonResponse commonResponse) {
 		logger.info("Inside addLibrarian");
 		try {
@@ -252,8 +248,7 @@ public class UserService extends BaseService {
 				user.setPassword(new BCryptPasswordEncoder()
 						.encode(commonRequest.getRequestParameters().get(ParameterConstants.PASSWORD.getName())));
 				user.setStatus(ConfigurationConstants.ACTIVE.getId());
-				em.persist(user);
-				em.flush();
+				userRepository.save(user);
 				user.setIdCardNumber("STUD00" + user.getId());
 				commonResponse.getResponseParameter().put(ParameterConstants.USER_ID.getName(), user.getId());
 				commonResponse.getResponseParameter().put(ParameterConstants.USERNAME.getName(), user.getUsername());
