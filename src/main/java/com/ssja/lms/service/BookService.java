@@ -264,7 +264,7 @@ public class BookService extends BaseService {
 			User user = userRepository.findByIdCardNumber(
 					commonRequest.getRequestParameters().get(ParameterConstants.ICARD_NUMBER.getName()));
 
-			if (user == null || issuer.getStatus() != StatusConstants.ACTIVE.getStatus()) {
+			if (user == null || user.getStatus() != StatusConstants.ACTIVE.getStatus()) {
 				commonResponse.getResponseParameter().put("message", "Invalid/inactive icard number");
 				commonResponse.setResponseCode(ResponseCodeConstants.BAD_REQUEST.getResponseCode());
 				commonResponse.setHttpStatusCode(HttpResponseCode.BAD_REQUEST.getHttpCode());

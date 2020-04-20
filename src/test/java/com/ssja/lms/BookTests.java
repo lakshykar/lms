@@ -47,6 +47,7 @@ class BookTests {
 	Map<String, String> requestParameters;
 	ApiCommonRequest commonRequest;
 	TestReporter reporter;
+	UserDetails applicationUser;
 
 	@MockBean
 	UserRepository userRepository;
@@ -59,76 +60,125 @@ class BookTests {
 		this.reporter = reporter;
 		requestParameters = new HashMap<>();
 		commonRequest = new ApiCommonRequest();
+
+		this.applicationUser = mock(UserDetails.class);
+		Authentication authentication = mock(Authentication.class);
+		SecurityContext securityContext = mock(SecurityContext.class);
+		when(securityContext.getAuthentication()).thenReturn(authentication);
+		SecurityContextHolder.setContext(securityContext);
 	}
 
 	@Autowired
 	RequestProcessor requestProcessor;
 
-	@Test
-	@DisplayName("Add book Test with missing parameters")
-	void addBookWithMissingParametersTest() {
+	@Nested
+	@DisplayName("Add Book Tests")
+	class AddBookTest{
+		
+		@Test
+		@DisplayName("Add book Test with missing parameters")
+		void addBookWithMissingParametersTest() {
 
-		commonRequest.setRequestParameters(requestParameters);
-		commonRequest.setInteractionId(InteractionType.ADD_BOOK.getInteractionId());
+			commonRequest.setRequestParameters(requestParameters);
+			commonRequest.setInteractionId(InteractionType.ADD_BOOK.getInteractionId());
 
-		ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
+			ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
 
-		try {
-			reporter.publishEntry(mapper.writeValueAsString(response));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			try {
+				reporter.publishEntry(mapper.writeValueAsString(response));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			assertAll(() -> assertEquals(1, response.getStatus(), () -> "Status should be failed"),
+					() -> assertEquals("400", response.getResponseCode(), () -> "Status should be bad request 400"));
+
 		}
 
-		assertAll(() -> assertEquals(1, response.getStatus(), () -> "Status should be failed"),
-				() -> assertEquals("400", response.getResponseCode(), () -> "Status should be bad request 400"));
+		@Test
+		@DisplayName("Add book Test with duplicate ISBN")
+		void addBookWithDuplicateISBNParametersTest() {
 
-	}
+			requestParameters.put("isbn", "1000110012");
+			requestParameters.put("author", "rohit");
+			requestParameters.put("title", "math");
+			requestParameters.put("publisher", "122dfe");
+			requestParameters.put("location", "self 20");
+			requestParameters.put("number_of_copies", "20");
 
-	@Test
-	@DisplayName("Add book Test with duplicate ISBN")
-	void addBookWithDuplicateISBNParametersTest() {
+			commonRequest.setRequestParameters(requestParameters);
+			commonRequest.setInteractionId(InteractionType.ADD_BOOK.getInteractionId());
 
-		requestParameters.put("isbn", "1000110012");
-		requestParameters.put("author", "rohi");
-		requestParameters.put("title", "math");
-		requestParameters.put("publisher", "122dfe");
-		requestParameters.put("location", "self 20");
-		requestParameters.put("number_of_copies", "20");
+			when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(applicationUser);
+			when(applicationUser.getUsername()).thenReturn("rohit");
 
-		commonRequest.setRequestParameters(requestParameters);
-		commonRequest.setInteractionId(InteractionType.ADD_BOOK.getInteractionId());
+			User user = new User("rohit", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1);
 
-		UserDetails applicationUser = mock(UserDetails.class);
-		Authentication authentication = mock(Authentication.class);
-		SecurityContext securityContext = mock(SecurityContext.class);
-		when(securityContext.getAuthentication()).thenReturn(authentication);
-		SecurityContextHolder.setContext(securityContext);
-		when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(applicationUser);
-		when(applicationUser.getUsername()).thenReturn("Roit");
+			Book book = new Book();
+			book.setIsbn("1000110012");
+			book.setAuthor("Rohit");
+			book.setLocation("abc self");
+			book.setNumberOfCopies(10);
+			book.setPublisher("Pub");
 
-		User user = new User("Rohit", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1);
+			when(userRepository.findByUsername("rohit")).thenReturn(user);
 
-		Book book = new Book();
-		book.setIsbn("1000110012");
-		book.setAuthor("Rohit");
-		book.setLocation("abc self");
-		book.setNumberOfCopies(10);
-		book.setPublisher("Pub");
+			when(bookRepository.findByIsbn("1000110012")).thenReturn(book);
+			ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
 
-		when(userRepository.findByUsername("rohit")).thenReturn(user);
-		when(bookRepository.findByIsbn("1000110012")).thenReturn(book);
-		ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
+			try {
+				reporter.publishEntry(mapper.writeValueAsString(response));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
 
-		try {
-			reporter.publishEntry(mapper.writeValueAsString(response));
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			assertAll(() -> assertEquals(1, response.getStatus(), () -> "Status should be failed"),
+					() -> assertEquals("603", response.getResponseCode(), () -> "Status should be bad request 603"));
+
 		}
 
-		assertAll(() -> assertEquals(1, response.getStatus(), () -> "Status should be failed"),
-				() -> assertEquals("400", response.getResponseCode(), () -> "Status should be bad request 400"));
+		@Test
+		@DisplayName("Add book Wih Correct parameters")
+		void addBookTest() {
 
+			requestParameters.put("isbn", "1000110012");
+			requestParameters.put("author", "rohit");
+			requestParameters.put("title", "math");
+			requestParameters.put("publisher", "122dfe");
+			requestParameters.put("location", "self 20");
+			requestParameters.put("number_of_copies", "20");
+
+			commonRequest.setRequestParameters(requestParameters);
+			commonRequest.setInteractionId(InteractionType.ADD_BOOK.getInteractionId());
+
+			when(SecurityContextHolder.getContext().getAuthentication().getPrincipal()).thenReturn(applicationUser);
+			when(applicationUser.getUsername()).thenReturn("rohit");
+
+			User user = new User("Rohit", "9300489836", "abc@gmail.com", UserTypeConstants.LIBRARIAN.getUserType(), 1);
+
+			Book book = new Book();
+			book.setIsbn("1000110012");
+			book.setAuthor("Rohit");
+			book.setLocation("abc self");
+			book.setNumberOfCopies(10);
+			book.setPublisher("Pub");
+
+			when(userRepository.findByUsername("rohit")).thenReturn(user);
+			when(bookRepository.findByIsbn("1000110012")).thenReturn(null);
+			ApiCommonResponse response = requestProcessor.processRequest(commonRequest);
+
+			try {
+				reporter.publishEntry(mapper.writeValueAsString(response));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+
+			assertAll(() -> assertEquals(0, response.getStatus(), () -> "Status should be success"),
+					() -> assertEquals("200", response.getResponseCode(), () -> "Status should be bad request 200"));
+
+		}
 	}
+	
 
 	@Nested
 	@DisplayName("Get Book Test")
